@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 테스트용 가상 응답: 실제 특허 아님 -->
+<response><header><successYN>Y</successYN><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
+<body><items>
+<item><indexNo>4</indexNo><registerStatus>공개</registerStatus><inventionTitle>[DEMO] 무여자 브레이크 일체형 관절</inventionTitle><ipcNumber>B25J 19/00|F16D 59/02</ipcNumber><applicationNumber>1020240900004</applicationNumber><applicationDate>20240402</applicationDate><openNumber>1020250900004</openNumber><openDate>20251010</openDate><astrtCont>가상 초록: 브레이크를 관절 모듈 내부에 둔다.</astrtCont><applicantName>가상로봇 주식회사</applicantName></item>
+<item><indexNo>5</indexNo><registerStatus>공개</registerStatus><inventionTitle>[DEMO] 관절 모듈의 방열 하우징</inventionTitle><ipcNumber>B25J 9/12</ipcNumber><applicationNumber>1020240900005</applicationNumber><applicationDate>20240815</applicationDate><openNumber>1020260900005</openNumber><openDate>20260210</openDate><astrtCont>가상 초록: 하우징 방열 핀.</astrtCont><applicantName>데모액추에이터 주식회사</applicantName></item>
+</items><numOfRows>3</numOfRows><pageNo>2</pageNo><totalCount>5</totalCount></body></response>

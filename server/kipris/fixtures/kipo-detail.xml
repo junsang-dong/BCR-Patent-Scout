@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 테스트용 가상 응답: 실제 특허 아님 -->
+<response><header><successYN>Y</successYN><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
+<body><item>
+<biblioSummaryInfoArray><biblioSummaryInfo><applicationDate>20210315</applicationDate><applicationNumber>1020210900001</applicationNumber><claimCount>2</claimCount><inventionTitle>[DEMO] 중공형 로봇 관절 구동 모듈</inventionTitle><inventionTitleEng>[DEMO] Hollow robot joint drive module</inventionTitleEng><openDate>20220920</openDate><openNumber>1020220900001</openNumber><registerNumber>1099000000001</registerNumber><registerStatus>등록</registerStatus></biblioSummaryInfo></biblioSummaryInfoArray>
+<ipcInfoArray><ipcInfo><ipcDate>20210101</ipcDate><ipcNumber>B25J 9/12</ipcNumber></ipcInfo><ipcInfo><ipcDate>20210101</ipcDate><ipcNumber>H02K 7/116</ipcNumber></ipcInfo></ipcInfoArray>
+<abstractInfoArray><abstractInfo><astrtCont>가상 초록: 감속기와 모터를 중공 하우징에 통합한 관절 모듈.</astrtCont></abstractInfo></abstractInfoArray>
+<claimInfoArray><claimInfo><claim>1. [DEMO] 중공 하우징; 상기 하우징에 내장된 모터; 및 파동기어 감속기를 포함하는 관절 구동 모듈.</claim></claimInfo><claimInfo><claim>2. 제1항에 있어서, 브레이크를 더 포함하는 관절 구동 모듈.</claim></claimInfo></claimInfoArray>
+<applicantInfoArray><applicantInfo><address>가상</address><code>000000000000</code><country>KR</country><engName>DEMO ACTUATOR CO.,LTD.</engName><name>데모액추에이터 주식회사</name></applicantInfo></applicantInfoArray>
+<familyInfoArray><familyInfo><familyApplicationNumber>DEMO-FAMILY-1</familyApplicationNumber></familyInfo></familyInfoArray>
+</item></body></response>

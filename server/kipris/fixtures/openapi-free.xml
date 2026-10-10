@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 테스트용 가상 응답: 실제 특허 아님 -->
+<response><header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
+<body><items><TotalSearchCount>2</TotalSearchCount>
+<PatentUtilityInfo><SerialNumber>1</SerialNumber><ApplicationNumber>1020230900011</ApplicationNumber><ApplicationDate>20230505</ApplicationDate><OpeningNumber>1020240900011</OpeningNumber><OpeningDate>20241101</OpeningDate><RegistrationNumber></RegistrationNumber><RegistrationDate></RegistrationDate><InternationalpatentclassificationNumber>B25J 9/12</InternationalpatentclassificationNumber><InventionName>[DEMO] 협동로봇 관절 토크 센싱</InventionName><Abstract>가상 초록.</Abstract><Applicant>DEMO 오픈API 테스트社</Applicant><RegistrationStatus>공개</RegistrationStatus></PatentUtilityInfo>
+<PatentUtilityInfo><SerialNumber>2</SerialNumber><ApplicationNumber>1020240900012</ApplicationNumber><ApplicationDate>20240909</ApplicationDate><InternationalpatentclassificationNumber>H02K 7/116</InternationalpatentclassificationNumber><InventionName>[DEMO] 모터-감속기 결합 구조</InventionName><Abstract>가상 초록.</Abstract><Applicant>DEMO 오픈API 테스트社</Applicant><RegistrationStatus>공개</RegistrationStatus></PatentUtilityInfo>
+</items></body></response>

@@ -1,0 +1,332 @@
+{
+  "version": "1.0",
+  "source": "BCR 제품 마스터 v2.1 (BCR-DOC-A100/A200/C100-M, 2026-06-15)",
+  "note": "키워드·IPC 후보는 검색 시작점이며 연구개발팀이 보정한다. IPC 의미는 WIPO IPC 공식 분류표로 확인 후 확정한다. 제품 이름(name)은 명세서에 직접 나오지 않아 기술 요소에서 붙인 이름이다.",
+  "products": [
+    {
+      "code": "BCR-A200",
+      "name": "고하중 로봇 관절용 액추에이터",
+      "features": [
+        {
+          "id": "A200-STRUCT",
+          "group": "구조",
+          "label": "감속기·모터·엔코더·드라이버 일체형 관절",
+          "spec": "제품 마스터 개요",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "관절 모듈",
+              "일체형",
+              "액추에이터"
+            ]
+          },
+          "ipc_hints": [
+            "B25J"
+          ]
+        },
+        {
+          "id": "A200-REDUCER",
+          "group": "감속기",
+          "label": "하모닉 드라이브 감속기 일체",
+          "spec": "감속비 101:1, 백래시 ≤ 1 arcmin",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "파동기어",
+              "하모닉",
+              "감속기"
+            ]
+          },
+          "ipc_hints": [
+            "F16H",
+            "B25J"
+          ]
+        },
+        {
+          "id": "A200-ENCODER",
+          "group": "센서",
+          "label": "듀얼 절대 엔코더",
+          "spec": "입력 19-bit 다회전 / 출력 17-bit",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "엔코더",
+              "절대 위치",
+              "출력축"
+            ]
+          },
+          "ipc_hints": [
+            "G01D",
+            "H02K"
+          ]
+        },
+        {
+          "id": "A200-STO",
+          "group": "안전",
+          "label": "STO 기본 내장",
+          "spec": "ISO 13849-1 PL d",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "토크 차단",
+              "안전 정지",
+              "STO"
+            ]
+          },
+          "ipc_hints": [
+            "B25J"
+          ]
+        },
+        {
+          "id": "A200-BRAKE",
+          "group": "안전",
+          "label": "무여자 브레이크 옵션 (BRK)",
+          "spec": "옵션",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "브레이크",
+              "제동",
+              "무여자"
+            ]
+          },
+          "ipc_hints": [
+            "F16D",
+            "B25J"
+          ]
+        },
+        {
+          "id": "A200-IP65",
+          "group": "환경",
+          "label": "IP65 방진·방수",
+          "spec": "IP65",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "방수",
+              "밀봉",
+              "실링"
+            ]
+          },
+          "ipc_hints": []
+        },
+        {
+          "id": "A200-COMM",
+          "group": "통신",
+          "label": "EtherCAT / CANopen",
+          "spec": "EtherCAT, CANopen",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "이더캣",
+              "필드버스"
+            ]
+          },
+          "ipc_hints": []
+        }
+      ]
+    },
+    {
+      "code": "BCR-A100",
+      "name": "소형·경량 로봇 관절용 액추에이터",
+      "features": [
+        {
+          "id": "A100-STRUCT",
+          "group": "구조",
+          "label": "소형·경량 일체형 관절",
+          "spec": "0.85 kg",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "소형",
+              "경량",
+              "관절 모듈"
+            ]
+          },
+          "ipc_hints": [
+            "B25J"
+          ]
+        },
+        {
+          "id": "A100-REDUCER",
+          "group": "감속기",
+          "label": "하모닉 드라이브 감속기",
+          "spec": "감속비 51:1",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "파동기어",
+              "하모닉"
+            ]
+          },
+          "ipc_hints": [
+            "F16H"
+          ]
+        },
+        {
+          "id": "A100-ENCODER",
+          "group": "센서",
+          "label": "17-bit 단회전 절대 엔코더",
+          "spec": "17-bit 단회전",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "엔코더"
+            ]
+          },
+          "ipc_hints": [
+            "G01D"
+          ]
+        },
+        {
+          "id": "A100-APPLICATION",
+          "group": "적용",
+          "label": "그리퍼·경량 협동로봇",
+          "spec": "그리퍼, 경량 협동로봇",
+          "keywords": {
+            "title": [
+              "관절",
+              "액추에이터"
+            ],
+            "abstract": [
+              "그리퍼",
+              "협동로봇"
+            ]
+          },
+          "ipc_hints": [
+            "B25J"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "BCR-C100",
+      "name": "다축 로봇 제어기",
+      "features": [
+        {
+          "id": "C100-MULTIAXIS",
+          "group": "제어",
+          "label": "최대 6축 EtherCAT 마스터 다축 제어",
+          "spec": "최대 6축",
+          "keywords": {
+            "title": [
+              "제어",
+              "로봇"
+            ],
+            "abstract": [
+              "다축 제어",
+              "모션 컨트롤러"
+            ]
+          },
+          "ipc_hints": [
+            "G05B"
+          ]
+        },
+        {
+          "id": "C100-MIXED",
+          "group": "제어",
+          "label": "A100·A200 혼합 구성",
+          "spec": "A100·A200 혼합",
+          "keywords": {
+            "title": [
+              "제어",
+              "로봇"
+            ],
+            "abstract": [
+              "이종 액추에이터",
+              "혼합"
+            ]
+          },
+          "ipc_hints": [
+            "G05B"
+          ]
+        },
+        {
+          "id": "C100-SAFETY",
+          "group": "안전",
+          "label": "STO 연동 · 비상정지 2채널",
+          "spec": "비상정지 2채널",
+          "keywords": {
+            "title": [
+              "제어",
+              "로봇"
+            ],
+            "abstract": [
+              "비상정지",
+              "안전 회로"
+            ]
+          },
+          "ipc_hints": [
+            "G05B"
+          ]
+        },
+        {
+          "id": "C100-SOFTWARE",
+          "group": "소프트웨어",
+          "label": "전용 IDE · Python API · G-code",
+          "spec": "IDE, Python API, G-code",
+          "keywords": {
+            "title": [
+              "제어",
+              "로봇"
+            ],
+            "abstract": [
+              "로봇 프로그래밍",
+              "모션 프로그램"
+            ]
+          },
+          "ipc_hints": [
+            "G05B"
+          ]
+        },
+        {
+          "id": "C100-COMM",
+          "group": "통신",
+          "label": "상위 Ethernet/IP · Modbus TCP · REST",
+          "spec": "Ethernet/IP, Modbus TCP, REST",
+          "keywords": {
+            "title": [
+              "제어",
+              "로봇"
+            ],
+            "abstract": [
+              "상위 통신",
+              "산업용 이더넷"
+            ]
+          },
+          "ipc_hints": []
+        }
+      ]
+    }
+  ]
+}
