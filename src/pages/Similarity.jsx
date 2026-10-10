@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { api } from "../lib/api.js";
 import { useHealth, fmtNo } from "../lib/ctx.js";
+import { useRights } from "../lib/useRights.js";
+import RightsPanel from "../components/RightsPanel.jsx";
 import catalog from "../../data/product-features.json";
 import { MATCH_LABEL, OVERALL_LABEL } from "../../shared/constants.js";
 import FeatureMatrix from "../components/FeatureMatrix.jsx";
 import { Alert, AiBadge, Badge, Loading } from "../components/ui.jsx";
 
-const BATCH = 5;
+const BATCH = 3; // 실제 AI 시험에서 5건이 약 90초 걸려 3건씩 나눈다 (서버 상한은 5건)
 
 export default function Similarity() {
   const { data } = useOutletContext();
@@ -24,6 +26,8 @@ export default function Similarity() {
   const [progress, setProgress] = useState(null);
   const [err, setErr] = useState(null);
   const [draft, setDraft] = useState({}); // 사람이 고친 값 (확정 전)
+  const [rightsMap, loadRights] = useRights();
+  const [rightsBusy, setRightsBusy] = useState(false);
 
   const load = useCallback(() => api.patents(project.id).then(ps => setPatents(ps.filter(p => p.pinned))), [project.id]);
   useEffect(() => { load().catch(e => setErr(e.message)); }, [load]);
@@ -47,6 +51,12 @@ export default function Similarity() {
       await load();
     }
     setProgress(null);
+  }
+
+  async function loadAllRights() {
+    setRightsBusy(true);
+    for (const r of rows) if (!rightsMap[r.applicationNumber]?.data) { const d = await loadRights(r.applicationNumber); if (!d) break; }
+    setRightsBusy(false);
   }
 
   const sel = selected ? rows.find(r => r.applicationNumber === selected.app) : null;
@@ -87,6 +97,10 @@ export default function Similarity() {
         <p className="small muted" style={{ margin: 0 }}>핀 고정한 {rows.length}건을 {BATCH}건씩 나눠 평가합니다. 일치·부분에는 원문 근거 문장이 붙고, 서버가 그 문장이 실제 원문에 있는지 확인합니다. ‡ 표시는 근거를 원문에서 찾지 못해 "불명"으로 내린 칸입니다.</p>
         {llmOff && <Alert kind="err">AI 공급자가 설정되지 않아 평가할 수 없습니다. 운영자에게 키와 모델 이름 설정을 요청하세요.</Alert>}
         {err && <Alert kind="err">{err}</Alert>}
+        <div className="row">
+          <button className="btn small" disabled={rightsBusy} onClick={loadAllRights}>{rightsBusy ? "권리 현황 조회 중…" : `핀 고정 ${rows.length}건 권리 현황 조회`}</button>
+          <span className="small muted">법적 상태 이력과 등록사항을 조회합니다 (특허당 호출 2회, 7일 캐시). 조회해 두면 보고서에 사실로 실립니다.</span>
+        </div>
         <div className="row small">
           <Badge kind="info">근거 검증 {check.verified}/{check.checked}{check.checked ? ` (${Math.round(check.verified / check.checked * 100)}%)` : ""}</Badge>
           <Badge kind={decided === rows.length ? "ok" : ""}>확정·보류 {decided}/{rows.length}</Badge>
@@ -94,7 +108,7 @@ export default function Similarity() {
       </section>
 
       <section className="card flat">
-        <FeatureMatrix rows={rows} features={features} selected={selected} onSelect={setSelected} />
+        <FeatureMatrix rows={rows.map(r => ({ ...r, rights: rightsMap[r.applicationNumber]?.data?.summary }))} features={features} selected={selected} onSelect={setSelected} />
       </section>
 
       {sel && (
@@ -103,6 +117,10 @@ export default function Similarity() {
             <div className="mono small">{fmtNo(sel.applicationNumber)} · {sel.applicant}</div>
             <h3>{sel.title}</h3>
           </div>
+          <details open={!!rightsMap[sel.applicationNumber]}>
+            <summary className="small">권리 현황 (법적 상태 이력 · 등록사항)</summary>
+            <div style={{ marginTop: 8 }}><RightsPanel application={sel.applicationNumber} state={rightsMap[sel.applicationNumber]} onLoad={loadRights} /></div>
+          </details>
           {sel.result ? (
             <>
               {selCell && selFeature && (

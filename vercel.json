@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/report-generate.js": { "maxDuration": 120, "includeFiles": "server/prompts/**" },
-    "api/analyze-similarity.js": { "maxDuration": 90, "includeFiles": "server/prompts/**" },
+    "api/analyze-similarity.js": { "maxDuration": 180, "includeFiles": "server/prompts/**" },
     "api/kipris-search.js": { "maxDuration": 60 }
   },
   "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]

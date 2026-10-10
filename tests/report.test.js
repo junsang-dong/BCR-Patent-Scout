@@ -7,7 +7,7 @@ const snap = {
   project: { title: "A300 조사", product_code: "BCR-A200", product_name: "고하중 로봇 관절용 액추에이터" },
   features: [{ id: "A200-BRAKE", label: "무여자 브레이크 옵션" }],
   header_facts: {
-    queries: [{ name: "a200-brake", inventionTitle: "관절", astrtCont: "브레이크", ipcNumber: "F16D", total_count: 42, fetched: 42, truncated: false }],
+    queries: [{ name: "a200-brake", inventionTitle: "관절", astrtCont: "브레이크", ipcNumber: "F16D", total_count: 42, collected: 42, more_available: false }],
     gateway: "kipo", collected_at: "2026-10-10", period: { from: 2016, to: 2026 }, include_utility: false, pinned_count: 5, evaluated_count: 5
   },
   stats: { total_records: 42, top_applicants: [{ applicant: "가상", count: 10, share_pct: 23.8 }], by_year: [{ year: 2024, count: 8 }] },

@@ -19,7 +19,7 @@ export default function KeywordComposer() {
   const [selected, setSelected] = useState(saved?.feature_ids ?? []);
   const [opts, setOpts] = useState(() => {
     const q0 = saved?.queries?.[0];
-    return { from: q0?.from ?? 2016, to: q0?.to ?? new Date().getFullYear(), patentOnly: q0 ? !q0.utility : true, max: q0?.max ?? 200 };
+    return { from: q0?.from ?? 2016, to: q0?.to ?? new Date().getFullYear(), patentOnly: q0 ? !q0.utility : true, max: q0?.max ?? 200, useTitle: !!q0?.inventionTitle && !!q0?.ipcNumber };
   });
   const [queries, setQueries] = useState(saved?.queries ?? []);
   const [truncated, setTruncated] = useState(false);
@@ -45,6 +45,15 @@ export default function KeywordComposer() {
   }
   function setOpt(k, v) { const o = { ...opts, [k]: v }; setOpts(o); if (selected.length) regen(selected, o); }
 
+  // 검색식별 IPC 후보 (요소의 ipc_hints를 합침). 칩을 눌러 더 좁은/넓은 IPC로 바꾼다.
+  const ipcHints = useMemo(() => {
+    const out = {};
+    for (const q of queries) {
+      const ids = q.featureIds ?? [];
+      out[q.name] = [...new Set(ids.flatMap(id => product.features.find(f => f.id === id)?.ipc_hints ?? []))];
+    }
+    return out;
+  }, [queries, product]);
   const kiprisOff = health?.kipris === "not_configured";
   const valid = queries.length > 0 && queries.every(q => q.inventionTitle || q.astrtCont || q.ipcNumber);
 
@@ -105,14 +114,17 @@ export default function KeywordComposer() {
           <label className="field" style={{ width: 110 }} htmlFor="to">출원연도 끝
             <input id="to" type="number" value={opts.to} min={1960} max={2100} onChange={e => setOpt("to", Number(e.target.value))} />
           </label>
-          <label className="field" style={{ width: 130 }} htmlFor="max">검색식당 최대 건수
+          <label className="field" style={{ width: 130 }} htmlFor="max">검색식당 총 한도
             <input id="max" type="number" value={opts.max} min={1} max={200} onChange={e => setOpt("max", Math.min(200, Math.max(1, Number(e.target.value) || 200)))} />
           </label>
           <label className="row small" style={{ alignSelf: "end", paddingBottom: 8 }}>
             <input type="checkbox" checked={opts.patentOnly} onChange={e => setOpt("patentOnly", e.target.checked)} /> 특허만 (실용신안 제외)
           </label>
+          <label className="row small" style={{ alignSelf: "end", paddingBottom: 8 }}>
+            <input type="checkbox" checked={opts.useTitle} onChange={e => setOpt("useTitle", e.target.checked)} /> 제목에도 제품 대표어(관절) 넣기 — 결과가 크게 줄어듭니다
+          </label>
         </div>
-        <p className="small muted" style={{ margin: 0 }}>기간은 받아온 결과를 출원연도로 거릅니다. 여러 단어를 한 칸에 넣을 때 AND/OR 처리 방식은 KIPRIS 확인 전이라 기본은 키워드 1개씩만 넣습니다.</p>
+        <p className="small muted" style={{ margin: 0 }}>기간은 KIPRIS가 출원일로 거릅니다. 한 칸에 여러 단어를 넣으면 모두 들어간 특허(AND)만 찾고 순서는 상관없습니다. 제목까지 걸면 실제로 0~4건까지 줄어 기본은 요약 키워드와 IPC로만 찾습니다.</p>
       </section>
 
       <section className="card stack">
@@ -123,7 +135,7 @@ export default function KeywordComposer() {
         {truncated && <Alert kind="warn">검색식은 조사당 최대 {MAX_QUERIES}개입니다. 초과분은 만들지 않았습니다. 기술 요소를 줄여 보세요.</Alert>}
         {queries.length === 0
           ? <p className="muted">기술 요소를 고르면 검색식이 여기에 만들어집니다.</p>
-          : <QueryTable queries={queries} preview={preview}
+          : <QueryTable queries={queries} preview={preview} ipcHints={ipcHints}
               onChange={(i, q) => { setQueries(qs => qs.map((x, j) => (j === i ? q : x))); setPreview(p => { const n = { ...p }; delete n[q.name]; return n; }); }}
               onRemove={i => setQueries(qs => qs.filter((_, j) => j !== i))} />}
         {kiprisOff && <Alert kind="err">KIPRIS 키가 설정되지 않아 건수 미리보기와 검색을 쓸 수 없습니다. 운영자에게 KIPRIS_API_KEY 설정을 요청하세요.</Alert>}
@@ -133,7 +145,7 @@ export default function KeywordComposer() {
           <button type="button" className="btn primary" onClick={save} disabled={!valid || selected.length < MIN_FEATURES || busy}>{busy === "save" ? "저장 중…" : "검색식 확정하고 수집 화면으로"}</button>
           {saved && <Link className="btn" to="../results">저장된 검색식으로 이동</Link>}
         </div>
-        <p className="small muted" style={{ margin: 0 }}>0건이거나 300건을 넘는 검색식은 노란 표시로 알려 드립니다. 수집은 검색식당 200건에서 멈춥니다.</p>
+        <p className="small muted" style={{ margin: 0 }}>수집은 검색식당 한 번에 20건씩이고, 검색 결과 화면의 "더 보기"로 다음 20건을 가져옵니다(총 한도 200건까지). 0건이거나 300건을 넘는 검색식은 노란 표시로 알려 드립니다. IPC 칩을 눌러 더 좁은 분류(예: 브레이크 B25J 19)로 바꿀 수 있습니다.</p>
       </section>
     </div>
   );

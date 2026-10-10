@@ -11,6 +11,7 @@ export default function FeatureMatrix({ rows, features, selected, onSelect }) {
             <th>특허</th>
             {features.map(f => <th key={f.id} title={f.spec}>{f.label}</th>)}
             <th>종합</th>
+            {rows.some(r => r.rights) && <th>권리</th>}
           </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@ export default function FeatureMatrix({ rows, features, selected, onSelect }) {
                 );
               })}
               <td className="small">{r.result ? ({ high: "높음", medium: "보통", low: "낮음" })[r.result.overall] : "-"}</td>
+              {rows.some(x => x.rights) && <td className="small">{r.rights ? ({ active: "존속 중", terminated: "소멸", expired: "만료", pending: "등록 전", registered_unchecked: "확인 필요", unknown: "-" })[r.rights.state] : "-"}{r.rights?.expirationDate ? <div className="muted mono">~{r.rights.expirationDate}</div> : null}</td>}
             </tr>
           ))}
         </tbody>

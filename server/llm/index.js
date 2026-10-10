@@ -38,8 +38,12 @@ export async function generate({ purpose, system, messages, maxTokens = 4096, js
     const call = provider === "openai" ? callOpenAI : provider === "mock" ? callMock : callAnthropic;
     const { text, usage } = await call(args);
     const out = { text, provider, model, usage, latencyMs: Date.now() - started };
-    if (json) out.json = extractJson(text);
-    await log({ projectId, purpose, provider, model, input: usage.input, output: usage.output, latencyMs: out.latencyMs, ok: true });
+    // JSON을 못 읽어도 던지지 않는다. 호출하는 쪽이 오류 내용을 붙여 한 번 다시 요청한다 (명세 4.2)
+    if (json) {
+      try { out.json = extractJson(text); }
+      catch (e) { out.json = null; out.jsonError = e.message; }
+    }
+    await log({ projectId, purpose, provider, model, input: usage.input, output: usage.output, latencyMs: out.latencyMs, ok: !out.jsonError, error: out.jsonError ? `json: ${out.jsonError}`.slice(0, 300) : null });
     return out;
   } catch (e) {
     await log({ projectId, purpose, provider, model, latencyMs: Date.now() - started, ok: false, error: scrubAll(e.message).slice(0, 300) });

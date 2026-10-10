@@ -78,7 +78,21 @@ export async function bumpDaily(kind, limit) {
   return n;
 }
 
+// 월 호출 횟수 (등록사항 API는 공공데이터포털 안내 기준 월 1,000건 무료. 여유를 두고 기본 900)
+export async function bumpMonthly(kind, limit) {
+  const month = new Date().toISOString().slice(0, 7);
+  const rows = await query(
+    `insert into app_settings (key, value) values ($1, to_jsonb(1))
+     on conflict (key) do update set value = to_jsonb((app_settings.value #>> '{}')::int + 1), updated_at = now()
+     returning (value #>> '{}')::int as n`,
+    [`monthly:${kind}:${month}`]
+  );
+  if (rows[0].n > limit) throw new ApiError(429, "monthly_limit", `이번 달 ${kind} 호출 한도(${limit}회)를 넘었습니다. 운영자에게 한도 조정을 요청하세요.`);
+  return rows[0].n;
+}
+
 export const limits = () => ({
   kipris: Number(process.env.KIPRIS_DAILY_LIMIT ?? 300),
-  reports: Number(process.env.LLM_DAILY_REPORTS ?? 30)
+  reports: Number(process.env.LLM_DAILY_REPORTS ?? 30),
+  registrationMonthly: Number(process.env.KIPRIS_REGISTRATION_MONTHLY_LIMIT ?? 900)
 });

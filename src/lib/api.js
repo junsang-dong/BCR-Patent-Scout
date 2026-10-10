@@ -43,7 +43,8 @@ export const api = {
   pin: (id, applicationNumber, pinned) => call("PATCH", `/api/projects?${q({ id, action: "pin" })}`, { applicationNumber, pinned }),
   saveReviewed: (id, applicationNumber, reviewed) => call("PATCH", `/api/projects?${q({ id, action: "similarity" })}`, { applicationNumber, reviewed }),
 
-  search: (projectId, query, preview = false) => call("POST", "/api/kipris-search", { projectId, query, preview }),
+  search: (projectId, query, preview = false, page = 1) => call("POST", "/api/kipris-search", { projectId, query, preview, page }),
+  rights: (applicationNumber, refresh = false) => call("POST", "/api/patent-rights", { applicationNumber, refresh }),
   detail: applicationNumber => call("POST", "/api/kipris-detail", { applicationNumber }),
   stats: projectId => call("GET", `/api/stats?${q({ projectId })}`),
   analyze: (projectId, applicationNumbers) => call("POST", "/api/analyze-similarity", { projectId, applicationNumbers }),

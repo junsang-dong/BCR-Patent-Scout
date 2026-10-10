@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 테스트용 가상 응답: 실제 특허 아님 -->
+<response><header><resultCode></resultCode><resultMsg></resultMsg></header><body><items><registrationInfo>
+<registrationRightInfo><registrationNumber>1099000000001</registrationNumber><registrationDate>20231120</registrationDate><assessmentDate>20231001</assessmentDate><expirationDate>20410315</expirationDate><terminationCauseName></terminationCauseName><terminationDate></terminationDate><applicationNumber>1020210900001</applicationNumber><classCode>B25J 9/12</classCode><titleOfInvention>[DEMO] 중공형 로봇 관절 구동 모듈</titleOfInvention><claimCount>2</claimCount></registrationRightInfo>
+<registrationRightHolderInfo><registrationRightHolderInfoA><rankNumber>1</rankNumber><rankCorrelatorType>권리자</rankCorrelatorType><rankCorrelatorName>데모액추에이터 주식회사</rankCorrelatorName></registrationRightHolderInfoA></registrationRightHolderInfo>
+<registrationFeeInfo><registrationDate>20231120</registrationDate><startAnnual>1</startAnnual><lastAnnual>3</lastAnnual><paymentDegree>1</paymentDegree><paymentFee>100000</paymentFee><paymentDate>20231121</paymentDate></registrationFeeInfo>
+<registrationLastRightHolderInfo><lastRightHolderName>데모액추에이터 주식회사</lastRightHolderName></registrationLastRightHolderInfo>
+</registrationInfo></items></body></response>

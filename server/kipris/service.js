@@ -2,6 +2,7 @@
 import { createClient, KiprisError } from "./kipris.js";
 import { normalizeKey } from "./env.js";
 import { mockFetch } from "./mock.js";
+import { createRightsClient } from "./rights.js";
 import { query } from "../db.js";
 
 export const isMock = () => process.env.KIPRIS_MOCK === "1";
@@ -22,7 +23,7 @@ export async function makeClient() {
   }
   const client = createClient({
     key, gateway,
-    scheme: (process.env.KIPRIS_SCHEME ?? "http").toLowerCase(),
+    scheme: (process.env.KIPRIS_SCHEME ?? "https").toLowerCase(),
     fetchImpl: mock ? mockFetch() : fetch,
     pauseMs: mock ? 0 : 250
   });
@@ -35,4 +36,11 @@ export async function rememberGateway(gw) {
     `insert into app_settings (key, value) values ('kipris_gateway', to_jsonb($1::text))
      on conflict (key) do update set value = to_jsonb($1::text), updated_at = now()`, [gw]
   );
+}
+
+export function makeRightsClient() {
+  const mock = isMock();
+  const key = mock ? "mock-key-not-real" : normalizeKey(process.env.KIPRIS_API_KEY);
+  if (!key) throw new KiprisError("KIPRIS 키가 설정되지 않았습니다. 운영자에게 KIPRIS_API_KEY 설정을 요청하세요.", { kind: "config" });
+  return createRightsClient({ key, fetchImpl: mock ? mockFetch() : fetch });
 }

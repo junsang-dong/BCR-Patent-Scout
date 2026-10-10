@@ -149,3 +149,9 @@ td input[type="text"] { padding: 4px 8px; font-size: 0.84rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 권리 현황 */
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0; font-size: 0.86rem; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+details > summary { cursor: pointer; }

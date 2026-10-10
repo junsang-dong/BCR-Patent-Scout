@@ -45,7 +45,12 @@ export default handle(async req => {
     const runs = await query(
       `select id, query_name, query, gateway, total_count, fetched, kept, truncated, error, started_at, finished_at
          from search_runs where project_id = $1::uuid order by started_at desc limit 50`, [id]);
-    return { project, keywordSet, runs, catalogVersion: catalog.version };
+    // 검색식별 누적 수집 건수 (더 보기 화면용)
+    const counts = await query(
+      `select q as name, count(*)::int as n from project_patents pp, unnest(pp.matched_queries) as q
+        where pp.project_id = $1::uuid group by q`, [id]);
+    const collected = Object.fromEntries(counts.map(c => [c.name, c.n]));
+    return { project, keywordSet, runs, collected, catalogVersion: catalog.version };
   }
 
   if (action === "patents") {

@@ -1,13 +1,13 @@
 import { fmtNo } from "../lib/ctx.js";
 import { Badge } from "./ui.jsx";
 
-export default function PatentTable({ rows, onPin, pinDisabled }) {
+export default function PatentTable({ rows, onPin, pinDisabled, onRights, rightsFor, rightsMap = {} }) {
   if (!rows.length) return <p className="muted" style={{ padding: 16 }}>조건에 맞는 특허가 없습니다.</p>;
   return (
     <div className="scroll-x">
       <table>
         <thead>
-          <tr><th>핀</th><th>출원번호</th><th>발명의 명칭</th><th>출원인</th><th>출원일</th><th>IPC</th><th>상태</th><th>걸린 검색식</th></tr>
+          <tr><th>핀</th><th>출원번호</th><th>발명의 명칭</th><th>출원인</th><th>출원일</th><th>IPC</th><th>상태</th><th>걸린 검색식</th>{onRights && <th>권리</th>}</tr>
         </thead>
         <tbody>
           {rows.map(r => (
@@ -22,6 +22,13 @@ export default function PatentTable({ rows, onPin, pinDisabled }) {
               <td className="small">{r.ipcNumber}</td>
               <td>{r.registerStatus ? <Badge>{r.registerStatus}</Badge> : null}</td>
               <td className="small mono">{(r.matchedQueries ?? []).join(", ")}</td>
+              {onRights && (
+                <td style={{ whiteSpace: "nowrap" }}>
+                  <button className="btn small" aria-pressed={rightsFor === r.applicationNumber} onClick={() => onRights(r.applicationNumber)}>
+                    {rightsMap[r.applicationNumber]?.data ? rightsMap[r.applicationNumber].data.summary.state === "active" ? "존속" : rightsMap[r.applicationNumber].data.summary.state === "terminated" ? "소멸" : "보기" : "조회"}
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

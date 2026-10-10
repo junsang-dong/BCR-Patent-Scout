@@ -16,6 +16,7 @@ const { default: reports } = await import("../api/reports.js");
 const { default: health } = await import("../api/health.js");
 const { default: detail } = await import("../api/kipris-detail.js");
 const { default: stats } = await import("../api/stats.js");
+const { default: rights } = await import("../api/patent-rights.js");
 const { default: catalog } = await import("../server/catalog.js");
 const { generateQueries } = await import("../shared/queries.js");
 
@@ -86,6 +87,57 @@ describe("조사와 검색", () => {
     expect(r.statusCode).toBe(503);
     expect(r.body.error.code).toBe("kipris_config");
     expect((await call(health, "GET")).body.kipris).toBe("mock");
+  });
+});
+
+describe("더 보기 (20건씩)와 권리 현황", () => {
+  test("2쪽을 요청하면 다음 쪽을 받고 누적 수집 건수를 돌려준다", async () => {
+    const p = (await call(projects, "POST", { body: { title: "더 보기", productCode: "BCR-A200", researchType: "planning" } })).body;
+    const q = { ...queries[0], name: "paging" };
+    const first = await call(search, "POST", { body: { projectId: p.id, query: q } });
+    expect(first.body).toMatchObject({ page: 1, pageSize: 20, mock: true });
+    const second = await call(search, "POST", { body: { projectId: p.id, query: q, page: 2 } });
+    expect(second.statusCode).toBe(200);
+    expect(second.body.page).toBe(2);
+    expect(second.body.collected).toBeGreaterThan(first.body.collected);
+    const detailRes = await call(projects, "GET", { query: { id: p.id } });
+    expect(detailRes.body.collected.paging).toBe(second.body.collected);
+    expect(detailRes.body.runs.map(r => r.query.page).sort()).toEqual([1, 2]);
+  });
+
+  test("검색식당 한도를 넘는 쪽은 거부", async () => {
+    const q = { ...queries[0], name: "paging-limit", max: 40 };
+    const r = await call(search, "POST", { body: { projectId: project.id, query: q, page: 3 } });
+    expect(r.statusCode).toBe(400);
+    expect(r.body.error.code).toBe("query_limit");
+  });
+
+  test("권리 현황: 법적 상태 + 등록사항을 조회하고 두 번째는 캐시 (16·17번)", async () => {
+    const a = await call(rights, "POST", { body: { applicationNumber: nums[0] } });
+    expect(a.statusCode, JSON.stringify(a.body)).toBe(200);
+    expect(a.body.cached).toBe(false);
+    expect(a.body.legal.events.length).toBeGreaterThan(0);
+    expect(a.body.registration).toMatchObject({ expirationDate: "2041-03-15" });
+    expect(a.body.summary).toMatchObject({ state: "active", expirationDate: "2041-03-15" });
+    const b = await call(rights, "POST", { body: { applicationNumber: nums[0] } });
+    expect(b.body.cached).toBe(true);
+    const c = await call(rights, "POST", { body: { applicationNumber: nums[0], refresh: true } });
+    expect(c.body.cached).toBe(false);
+  });
+
+  test("수집된 적 없는 특허의 권리 조회는 거부", async () => {
+    const r = await call(rights, "POST", { body: { applicationNumber: "1099999999999" } });
+    expect(r.statusCode).toBe(400);
+  });
+
+  test("조회해 둔 권리 현황이 보고서 입력에 실린다 (추가 호출 없이)", async () => {
+    await call(projects, "PATCH", { query: { id: project.id, action: "pin" }, body: { applicationNumber: nums[0], pinned: true } });
+    const g = await call(generateReport, "POST", { body: { projectId: project.id, researchType: "planning" } });
+    expect(g.statusCode, JSON.stringify(g.body)).toBe(200);
+    const rep = (await call(reports, "GET", { query: { id: g.body.reportId, snapshot: "1" } })).body;
+    const withRights = rep.input_snapshot.patents.find(p => p.rights);
+    expect(withRights.rights).toMatchObject({ expiration_date: "2041-03-15" });
+    expect(rep.input_snapshot.header_facts.queries[0]).toHaveProperty("collected");
   });
 });
 

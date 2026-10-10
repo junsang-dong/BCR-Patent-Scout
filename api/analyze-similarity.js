@@ -42,11 +42,13 @@ export default handle(async req => {
   const system = `${prompts.common()}\n\n${prompts.similarity()}`;
 
   // 형식이 틀리면 오류 내용을 붙여 한 번만 다시 요청한다
+  const parse = c => (c.json ? similarityBatch.safeParse(c.json) : { success: false, note: `JSON을 읽지 못함: ${c.jsonError}. 문자열 안의 큰따옴표는 \\\"로 이스케이프하거나 쓰지 않는다.` });
+  const noteOf = r => r.note ?? r.error.issues.slice(0, 3).map(i => `${i.path.join(".")}: ${i.message}`).join("; ");
   let call = await askModel(system, input, b.projectId);
-  let parsed = similarityBatch.safeParse(call.json);
+  let parsed = parse(call);
   if (!parsed.success) {
-    call = await askModel(system, input, b.projectId, parsed.error.issues.slice(0, 3).map(i => `${i.path.join(".")}: ${i.message}`).join("; "));
-    parsed = similarityBatch.safeParse(call.json);
+    call = await askModel(system, input, b.projectId, noteOf(parsed));
+    parsed = parse(call);
     if (!parsed.success) throw new ApiError(502, "llm_invalid_output", "AI 응답 형식이 올바르지 않아 평가하지 못했습니다. 잠시 뒤 다시 시도하세요.");
   }
 

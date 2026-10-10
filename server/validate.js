@@ -36,10 +36,12 @@ export const keywordsBody = z.object({
 export const searchBody = z.object({
   projectId: uuid,
   query: queryItem,
-  preview: z.boolean().optional()
+  preview: z.boolean().optional(),
+  page: z.number().int().min(1).max(10).optional()   // 1쪽 = 처음 20건, 2쪽 = 다음 20건 ("더 보기")
 });
 
 export const detailBody = z.object({ applicationNumber: appNo });
+export const rightsBody = z.object({ applicationNumber: appNo, refresh: z.boolean().optional() });
 export const pinBody = z.object({ applicationNumber: appNo, pinned: z.boolean() });
 export const analyzeBody = z.object({ projectId: uuid, applicationNumbers: z.array(appNo).min(1).max(5) });
 export const reviewedBody = z.object({ applicationNumber: appNo, reviewed: z.any() });

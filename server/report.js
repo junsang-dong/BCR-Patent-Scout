@@ -17,7 +17,7 @@ export function renderHeader(snap, { provider, model, createdAt }) {
   const t = RESEARCH_TYPES[snap.research_type];
   const h = snap.header_facts;
   const rows = h.queries.map(q =>
-    `| ${cell(q.name)} | ${cell(queryCondition(q))} | ${q.total_count ?? "-"} | ${q.fetched ?? "-"}${q.truncated ? " (잘림)" : ""} |`).join("\n");
+    `| ${cell(q.name)} | ${cell(queryCondition(q))} | ${q.total_count ?? "-"} | ${q.collected ?? "-"}${q.more_available ? " (더 있음)" : ""} |`).join("\n");
   const features = snap.features.map(f => f.label).join(", ");
   return `${DRAFT_LINE}
 

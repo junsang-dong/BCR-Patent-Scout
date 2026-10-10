@@ -16,6 +16,8 @@ export function mockFetch({ authFail = false } = {}) {
     if (op === "getAdvancedSearch") body = authFail ? read("kipo-auth-error.xml") : read(u.searchParams.get("pageNo") === "2" ? "kipo-search-p2.xml" : "kipo-search-p1.xml");
     else if (op === "freeSearchInfo") body = read("openapi-free.xml");
     else if (op === "getBibliographyDetailInfoSearch") body = read("kipo-detail.xml");
+    else if (op === "BasicInfo") body = read("st27-legal.xml");
+    else if (op === "registrationInfo") body = read("registration.xml");
     else body = read("kipo-auth-error.xml");
     return { ok: true, status: 200, text: async () => body };
   };
